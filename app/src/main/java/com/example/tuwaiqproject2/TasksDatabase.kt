@@ -31,7 +31,7 @@ class TasksDatabase(context: Context) : SQLiteOpenHelper(
         val db = writableDatabase
         val values = ContentValues()
         values.put(COLUMN_TASK, tasks.task)
-        values.put(COLUMN_COMPLETE , tasks.complete)
+        values.put(COLUMN_COMPLETE, tasks.complete)
 
         db.insert(TABLE_NAME, null, values)
         // NULL COLUMN HACK  -> this is when i don't insert value (i.e we didn't insert ID) it will
@@ -54,16 +54,16 @@ class TasksDatabase(context: Context) : SQLiteOpenHelper(
         try {
             val cursor = db.rawQuery(query, null)
             cursor.moveToFirst()
-            while (cursor.moveToNext()) {
-                val task = cursor.getString(cursor.getColumnIndex(COLUMN_TASK))
-                val complete = cursor.getString(cursor.getColumnIndex(COLUMN_COMPLETE))
-                //val email = cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL))
-                val taskinfo = Tasks(task , complete )
-                tasks.add(taskinfo)
+            if (cursor.isFirst) {
+                do {
+                    val task = cursor.getString(cursor.getColumnIndex(COLUMN_TASK))
+                    val complete = cursor.getString(cursor.getColumnIndex(COLUMN_COMPLETE))
+                    val taskinfo = Tasks(task, complete)
+                    tasks.add(taskinfo)
+                } while (cursor.moveToNext())
             }
-
-        } catch (exception: SQLiteException){
-            Log.d("exception" , "getUser: ${exception.message}")
+        } catch (exception: SQLiteException) {
+            Log.d("exception", "getUser: ${exception.message}")
         }
         return tasks
 
@@ -71,17 +71,11 @@ class TasksDatabase(context: Context) : SQLiteOpenHelper(
     }
 
 
-
-
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         val dropTable = "DROP TABLE IF EXISTS $TABLE_NAME"
         db.execSQL(dropTable)
         onCreate(db)
     }
-
-
-
-
 
 
 }

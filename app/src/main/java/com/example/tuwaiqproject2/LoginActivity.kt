@@ -19,16 +19,18 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     var database = UserDatabase(this)
-    private var users = arrayListOf<Users>()
+    private lateinit var users: List<Users>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        users = database.getUsers()
         supportActionBar?.hide()
         val toolbar = findViewById<Toolbar>(R.id.logintoolbar)
         val textView = findViewById<TextView>(R.id.loginnumber)
         val login = findViewById<Button>(R.id.loginbutton)
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        users = database.getUsers() as ArrayList<Users>
+        for (i in users)
+            Log.d("Works", "g: ${i}")
         toolbar.setNavigationOnClickListener {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
             finish()
@@ -39,11 +41,14 @@ class LoginActivity : AppCompatActivity() {
         login.setOnClickListener {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
             val num = textView.text.toString()
-            for (i in users)
-                if(num != i.num)
+
+            for (i in users) {
+                if (num == i.num) {
                     startActivity(Intent(this, HomeActivity::class.java))
-                else
-                    Toast.makeText(this, "Phone is not registered", Toast.LENGTH_SHORT).show()
+                }
+            }
+            Toast.makeText(this, "Phone is not registered", Toast.LENGTH_SHORT).show()
+
         }
     }
 }

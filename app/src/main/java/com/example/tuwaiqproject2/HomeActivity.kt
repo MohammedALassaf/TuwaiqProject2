@@ -17,7 +17,8 @@ class HomeActivity : AppCompatActivity() {
     var database = TasksDatabase(this)
     private lateinit var adapter: TaskRecyclerView
     private lateinit var taskList: RecyclerView
-    private var tasks=   arrayListOf<Tasks>()
+    private var tasks = arrayListOf<Tasks>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -36,10 +37,11 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
     }
+
     private fun listAdapter() {
-            tasks = database.getTasks() as ArrayList<Tasks>
-            adapter = TaskRecyclerView(tasks)
-            taskList.adapter = adapter
+        tasks = database.getTasks() as ArrayList<Tasks>
+        adapter = TaskRecyclerView(tasks)
+        taskList.adapter = adapter
 
     }
 

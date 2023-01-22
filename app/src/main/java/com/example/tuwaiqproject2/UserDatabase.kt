@@ -31,7 +31,7 @@ class UserDatabase(context: Context) : SQLiteOpenHelper(
         val db = writableDatabase
         val values = ContentValues()
         values.put(COLUMN_NAME, user.name)
-        values.put(COLUMN_ID , user.num)
+        values.put(COLUMN_ID, user.num)
         values.put(COLUMN_EMAIL, user.email)
         db.insert(TABLE_NAME, null, values)
         // NULL COLUMN HACK  -> this is when i don't insert value (i.e we didn't insert ID) it will
@@ -48,28 +48,31 @@ class UserDatabase(context: Context) : SQLiteOpenHelper(
     }
 
     fun getUsers(): List<Users> {
+
         val users = arrayListOf<Users>()
         val db = readableDatabase
-        val query = "SELECT * FROM $TABLE_NAME  "
+        val query = "SELECT * FROM $TABLE_NAME"
 
         try {
             val cursor = db.rawQuery(query, null)
             cursor.moveToFirst()
-            while (cursor.moveToNext()) {
-                val id = cursor.getString(cursor.getColumnIndex(COLUMN_ID))
-                val name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
-                val email = cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL))
-                val userinfo = Users(id , name , email)
-                users.add(userinfo)
+            if(cursor.isFirst) {
+                do {
+                    val num = cursor.getString(cursor.getColumnIndex(COLUMN_ID))
+                    val name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
+                    val email = cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL))
+                    val userinfo = Users(num, name, email)
+                    users.add(userinfo)
+                } while (cursor.moveToNext())
             }
-
-        } catch (exception: SQLiteException){
-            Log.d("exception" , "getUser: ${exception.message}")
+        } catch (exception: SQLiteException) {
+            Log.d("exception", "getUser: ${exception.message}")
         }
         return users
 
 
     }
+
     fun getUser(number: String): Users {
         val db = readableDatabase
         val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_ID = '$number'"
@@ -81,12 +84,12 @@ class UserDatabase(context: Context) : SQLiteOpenHelper(
                 val id = cursor.getString(cursor.getColumnIndex(COLUMN_ID))
                 val name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
                 //val email = cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL))
-                 return  Users(id , name , "email")
+                return Users(id, name, "email")
 
             }
 
-        } catch (exception: SQLiteException){
-            Log.d("exception" , "getUser: ${exception.message}")
+        } catch (exception: SQLiteException) {
+            Log.d("exception", "getUser: ${exception.message}")
         }
 
         return Users(" ", " ", " ")
@@ -94,11 +97,11 @@ class UserDatabase(context: Context) : SQLiteOpenHelper(
 
     }
 
-    fun changeUser(newName: String, oldName: String){
+    fun changeUser(newName: String, oldName: String) {
         val db = writableDatabase
         val values = ContentValues()
-        values.put(COLUMN_NAME , newName)
-        db.update(TABLE_NAME , values , "$COLUMN_NAME = '$oldName' " ,null)
+        values.put(COLUMN_NAME, newName)
+        db.update(TABLE_NAME, values, "$COLUMN_NAME = '$oldName' ", null)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -108,12 +111,10 @@ class UserDatabase(context: Context) : SQLiteOpenHelper(
         onCreate(db)
     }
 
-    fun delete(name:String){
+    fun delete(name: String) {
         val db = writableDatabase
-        db.delete(TABLE_NAME, "$COLUMN_NAME = '$name' ",  null)
+        db.delete(TABLE_NAME, "$COLUMN_NAME = '$name' ", null)
     }
-
-
 
 
 }
