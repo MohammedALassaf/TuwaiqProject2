@@ -24,7 +24,9 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-        users = database.getUsers()
+        val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
+        viewModel.initDB(database)
+        users = viewModel.getUsers()
         supportActionBar?.hide()
         val toolbar = findViewById<Toolbar>(R.id.registertoolbar)
         val name = findViewById<EditText>(R.id.registername)
@@ -51,23 +53,17 @@ class RegisterActivity : AppCompatActivity() {
             val nametext = name.text.toString()
             val num = number.text.toString()
             val emailtext = email.text.toString()
-            var boolean = false
-            for(i in users){
-                if (i.num != num){
-                    boolean = false
-                }else{
-                    boolean = true
-                    break
-                }
-            }
+            val boolean = viewModel.checkUser(users, num)
            if(!boolean) {
                val user = Users(
                    num,
                    nametext,
                    emailtext
                )
-               database.insertUser(user)
-               startActivity(Intent(this, HomeActivity::class.java))
+               viewModel.addUser(user)
+               val intent= Intent(this, HomeActivity::class.java)
+               intent.putExtra("number", num)
+               startActivity(intent)
            }else{
                Toast.makeText(this, "Number already registered", Toast.LENGTH_SHORT).show()
            }

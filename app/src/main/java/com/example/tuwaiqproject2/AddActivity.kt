@@ -7,15 +7,20 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.Task
 
 class AddActivity : AppCompatActivity() {
-    var database = TasksDatabase(this)
+    var database = TaskDB(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
         supportActionBar?.hide()
+        val number = intent.getStringExtra("number").toString()
+        val viewModel = ViewModelProvider(this)[AddViewModel::class.java]
+        viewModel.initDB(database)
         val toolbar = findViewById<Toolbar>(R.id.addtoolbar)
         val taskdesc = findViewById<EditText>(R.id.task)
         val checkBox = findViewById<CheckBox>(R.id.checkBox2)
@@ -35,13 +40,19 @@ class AddActivity : AppCompatActivity() {
             val name = taskdesc.text.toString()
             val check = checkBox.isChecked
 
-            var task = if (check) {
-                Tasks(name, "Finished")
+            val task = if (check) {
+                    Tasks(number,name, "Finished")
+
             } else {
-                Tasks(name, "Not Finished")
+
+                    Tasks(number, name, "Not Finished")
+
             }
-            database.insertTask(task)
-            finish()
+            if (viewModel.addTask(task)) {
+                finish()
+            }else{
+                Toast.makeText(this, "Please Change Task name", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

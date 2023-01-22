@@ -7,18 +7,18 @@ import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 
-class TasksDatabase(context: Context) : SQLiteOpenHelper(
+class TaskDB(context: Context) : SQLiteOpenHelper(
     context, DATABASE_NAME, null,
     DATABASE_VERSION
 ) {
     companion object {
         // DB info
-        const val DATABASE_NAME = "task_database"
+        const val DATABASE_NAME = "task_DB"
         const val DATABASE_VERSION = 1
 
         //Table info
-        const val TABLE_NAME = "user_table"
-
+        const val TABLE_NAME = "task_table"
+        const val COLUMN_NUMBER = "number"
         const val COLUMN_TASK = "task"
         const val COLUMN_COMPLETE = "complete"
 
@@ -30,6 +30,7 @@ class TasksDatabase(context: Context) : SQLiteOpenHelper(
 //        readableDatabase
         val db = writableDatabase
         val values = ContentValues()
+        values.put(COLUMN_NUMBER, tasks.number)
         values.put(COLUMN_TASK, tasks.task)
         values.put(COLUMN_COMPLETE, tasks.complete)
 
@@ -40,8 +41,7 @@ class TasksDatabase(context: Context) : SQLiteOpenHelper(
 
     override fun onCreate(db: SQLiteDatabase) {
         val initTable = "CREATE TABLE $TABLE_NAME " +
-                "($COLUMN_TASK TEXT PRIMARY KEY," +
-                " $COLUMN_COMPLETE TEXT)"
+                "($COLUMN_TASK TEXT PRIMARY KEY, $COLUMN_COMPLETE TEXT, $COLUMN_NUMBER TEXT)"
 
         db.execSQL(initTable)
     }
@@ -56,9 +56,10 @@ class TasksDatabase(context: Context) : SQLiteOpenHelper(
             cursor.moveToFirst()
             if (cursor.isFirst) {
                 do {
+                    val number = cursor.getString(cursor.getColumnIndex(COLUMN_NUMBER))
                     val task = cursor.getString(cursor.getColumnIndex(COLUMN_TASK))
                     val complete = cursor.getString(cursor.getColumnIndex(COLUMN_COMPLETE))
-                    val taskinfo = Tasks(task, complete)
+                    val taskinfo = Tasks(number, task, complete)
                     tasks.add(taskinfo)
                 } while (cursor.moveToNext())
             }

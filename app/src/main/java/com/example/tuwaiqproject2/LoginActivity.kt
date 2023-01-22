@@ -23,7 +23,10 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        users = database.getUsers()
+//        users = database.getUsers()
+        val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        viewModel.initDB(database)
+        users = viewModel.getUsers()
         supportActionBar?.hide()
         val toolbar = findViewById<Toolbar>(R.id.logintoolbar)
         val textView = findViewById<TextView>(R.id.loginnumber)
@@ -41,13 +44,13 @@ class LoginActivity : AppCompatActivity() {
         login.setOnClickListener {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
             val num = textView.text.toString()
+            val check = viewModel.checkUser(users, num)
 
-            for (i in users) {
-                if (num == i.num) {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                }
-            }
-            Toast.makeText(this, "Phone is not registered", Toast.LENGTH_SHORT).show()
+            if (check) {
+                val intent =Intent(this, HomeActivity::class.java)
+                intent.putExtra("number", num)
+                startActivity(intent)
+            }else Toast.makeText(this, "Phone is not registered", Toast.LENGTH_SHORT).show()
 
         }
     }
