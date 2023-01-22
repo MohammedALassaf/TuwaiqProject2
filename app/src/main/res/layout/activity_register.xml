@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/languidGray"
+    tools:context=".LoginActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/registertoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/iconarrow"
+        app:title="Sign In" />
+
+
+
+
+        <EditText
+            android:id="@+id/registernum"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@color/queenBlue"
+            android:ems="10"
+            android:hint="@string/phone_number"
+            android:minHeight="48dp"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/registername"
+            app:layout_constraintTop_toBottomOf="@+id/registertoolbar" />
+
+
+
+        <EditText
+            android:id="@+id/registername"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="@color/queenBlue"
+            android:hint="@string/name"
+            android:textColor="@color/white"
+            android:minHeight="48dp"
+            android:textColorHint="#8F000000"
+            app:layout_constraintBottom_toTopOf="@+id/registeremail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registernum" />
+
+
+
+
+        <EditText
+            android:id="@+id/registeremail"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="@color/queenBlue"
+            android:hint="@string/email"
+            android:textColor="@color/white"
+            android:minHeight="48dp"
+            android:textColorHint="#8F000000" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/registerbutton"
+            app:layout_constraintTop_toBottomOf="@+id/registername"/>
+
+    <Button
+        android:id="@+id/registerbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/register"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registeremail"
+        app:layout_constraintVertical_bias="0.414" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TuwaiqProject1</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="welcome">Welcome</string>
+    <string name="car_wash">Car Wash</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="name">Name</string>
+    <string name="finished">Finished</string>
+    <string name="home">Home</string>
+    <string name="add">+</string>
+    <string name="add_task">Add Task</string>
+</resources>
